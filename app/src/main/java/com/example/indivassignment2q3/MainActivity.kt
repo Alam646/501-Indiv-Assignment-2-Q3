@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun KotlinPracticeScreen(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier.padding(16.dp), // local padding
+        modifier = modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -56,17 +56,19 @@ fun KotlinPracticeScreen(modifier: Modifier = Modifier) {
             text = "Kotlin Practice Screen (Q3)",
             style = MaterialTheme.typography.headlineSmall
         )
-        // State for the input string for the 'when' expression
+
+        // Using a state variable to allow dynamic input for the 'when' expression
         var animalInput by rememberSaveable { mutableStateOf("cat") }
 
-        // The 'when' expression to determine the output
+        // The 'when' expression provides a clear and concise way to handle multiple
+        // distinct cases based on the 'animalInput' value, enhancing the readability
+        // compared to just having multiple if-else statements
         val animalSound = when (animalInput) {
             "cat" -> "Meow"
             "dog" -> "Woof"
             "fish" -> "BlubBlub"
             else -> "Unknown animal"
         }
-
 
         Text(text = "Animal Sound Checker", style = MaterialTheme.typography.titleMedium)
         Row(
@@ -80,12 +82,12 @@ fun KotlinPracticeScreen(modifier: Modifier = Modifier) {
         Text(text = "Input: $animalInput")
         Text(text = "Sound: $animalSound", style = MaterialTheme.typography.bodyLarge)
 
-        Spacer(modifier = Modifier.height(16.dp)) // Space for next section
+        Spacer(modifier = Modifier.height(16.dp))
 
-
-        // --- Start: Nullable String Section ---
+        // to demonstrate robust handling of potentially absent data
         Text("Nullable String Checker", style = MaterialTheme.typography.titleMedium)
 
+        // 'optionalMessage' is nullable to represent data that may or may not be present.
         var optionalMessage: String? by rememberSaveable { mutableStateOf(null) }
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -97,23 +99,37 @@ fun KotlinPracticeScreen(modifier: Modifier = Modifier) {
             }
         }
 
-        // Using ?.let to conditionally display the message
+        // '?.let' is crucial here for null safety. It ensures that operations on
+        // 'optionalMessage' (like displaying it) only occur if it actually holds a value,
+        // which in turn helps with preventing NullPointerExceptions and making the code more resilient
         optionalMessage?.let { message ->
             Text(
                 text = "Message: $message",
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.primary // Example to make it stand out
+                color = MaterialTheme.colorScheme.primary
             )
-        } ?: Text(
-            // This Text is shown if optionalMessage is null
+        } ?: Text( // Provides user feedback when the optional data is absent
             text = "Message is currently null.",
             style = MaterialTheme.typography.bodyMedium
         )
-        // --- End: Nullable String Section ---
-
 
         Spacer(modifier = Modifier.height(16.dp))
-        Text("Counter Section (Later)", style = MaterialTheme.typography.titleMedium)
+
+        // State to manage a numerical value that has specific constraints
+        var counter by rememberSaveable { mutableStateOf(0) }
+
+        Text("Counter Limited to 5", style = MaterialTheme.typography.titleMedium)
+        Button(onClick = {
+            // The 'if' condition is necessary to enforce the business rule that the
+            // counter should not exceed a specific limit, demonstrating controlled state mutation
+            if (counter < 5) {
+                counter++
+            }
+        }) {
+            Text("Increment Counter (Limit 5)")
+        }
+        Text("Counter Value: $counter", style = MaterialTheme.typography.bodyLarge)
+
         Spacer(modifier = Modifier.height(16.dp))
     }
 }
