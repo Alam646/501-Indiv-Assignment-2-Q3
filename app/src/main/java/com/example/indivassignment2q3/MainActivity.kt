@@ -83,7 +83,35 @@ fun KotlinPracticeScreen(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(16.dp)) // Space for next section
 
 
-        Text("Nullable String Section (Next)", style = MaterialTheme.typography.titleMedium)
+        // --- Start: Nullable String Section ---
+        Text("Nullable String Checker", style = MaterialTheme.typography.titleMedium)
+
+        var optionalMessage: String? by rememberSaveable { mutableStateOf(null) }
+
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(onClick = { optionalMessage = "Hello from the ?.let block!" }) {
+                Text("Set Message")
+            }
+            Button(onClick = { optionalMessage = null }) {
+                Text("Clear Message")
+            }
+        }
+
+        // Using ?.let to conditionally display the message
+        optionalMessage?.let { message ->
+            Text(
+                text = "Message: $message",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.primary // Example to make it stand out
+            )
+        } ?: Text(
+            // This Text is shown if optionalMessage is null
+            text = "Message is currently null.",
+            style = MaterialTheme.typography.bodyMedium
+        )
+        // --- End: Nullable String Section ---
+
+
         Spacer(modifier = Modifier.height(16.dp))
         Text("Counter Section (Later)", style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(16.dp))
